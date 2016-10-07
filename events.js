@@ -47,14 +47,25 @@ EventTracker.prototype.triggerNotifications = function(event, param) {
  * @param {string} event name
  * @param {function} callback
  */
-EventTracker.prototype.on = function(event, callback) {
+EventTracker.prototype.on = function(events, callback) {
+  function register(event) { this.registerEvent(event, callback) };
+  // parse events
+  events = events.split(' ');
+  // register multiple events
+  events.forEach(register, this);
+};
+
+/*
+ * Register each event per callback
+ */
+EventTracker.prototype.registerEvent = function(event, callback) {
   // initialize callback array if not present
   this._events[event] = this._events[event] ?
     this._events[event] : [];
 
   // push callback to stack
   this._events[event].push(callback);
-};
+}
 
 
 /*

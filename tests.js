@@ -68,3 +68,24 @@ QUnit.test('Can register multiple listeners for an event', function (assert) {
   child.notify(parent2, 'christmas_morning');
   child.trigger('christmas_morning', 'presents!');
 });
+
+QUnit.test('Can register multiple events at once', function (assert) {
+  var parent1 = new EventTracker('parent 1');
+  var parent2 = new EventTracker('parent 2');
+  var parent3 = new EventTracker('parent 3');
+  parent1.on('christmas kwanzaa', function(param) {
+    assert.ok(true, 'Parent 1 celebrates ' + param);
+  });
+  parent2.on('kwanzaa diwali', function(param) {
+    assert.ok(true, 'Parent 2 celebrates ' + param);
+  });
+  parent3.on('christmas laba', function(param) {
+    assert.ok(true, 'Parent 3 celebrates ' + param);
+  });
+
+  assert.expect(4);
+  parent2.notify(parent1, 'kwanzaa');
+  parent1.notify(parent3, 'christmas');
+  parent2.trigger('kwanzaa', 'kwanzaa');
+  parent1.trigger('christmas', 'christmas');
+});
