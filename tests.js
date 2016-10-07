@@ -99,3 +99,22 @@ QUnit.test('Can trigger multiple events at once', function (assert) {
   assert.expect(4);
   people.trigger('kwanzaa diwali easter eid_al-fitr', 'life');
 });
+
+QUnit.test('Can notify multiple instances at once', function (assert) {
+  var a = new EventTracker('a');
+  var b = new EventTracker('b');
+  var c = new EventTracker('c');
+  a.on('marco', function(param) {
+    assert.ok(true, param);
+  });
+  b.on('marco', function(param) {
+    assert.ok(true, param);
+  });
+  c.on('marco', function(param) {
+    assert.ok(true, param);
+  });
+
+  assert.expect(3);
+  a.notify([b, c], 'marco');
+  a.trigger('marco', 'polo');
+});

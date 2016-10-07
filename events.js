@@ -62,7 +62,6 @@ EventTracker.prototype.registerEvent = function(event, callback) {
   // initialize callback array if not present
   this._events[event] = this._events[event] ?
     this._events[event] : [];
-
   // push callback to stack
   this._events[event].push(callback);
 }
@@ -73,11 +72,24 @@ EventTracker.prototype.registerEvent = function(event, callback) {
  * @param {object} named instance
  * @param {string} named event
  */
-EventTracker.prototype.notify = function(instance, event) {
+EventTracker.prototype.notify = function(toNotify, event) {
   // initialize notifications array if not present
   this._notifications[event] = Array.isArray(this._notifications[event]) ?
     this._notifications[event] : [];
 
+  var self = this;
+
+  function notifyEach(each) { self.notifyEach(each, event); }
+
+  if (Array.isArray(toNotify)) {
+    toNotify.forEach(notifyEach, self);
+  } else {
+    notifyEach(toNotify);
+  }
+};
+
+
+EventTracker.prototype.notifyEach = function(instance, event) {
   // push instance to array for a specific event
   this._notifications[event].push(instance);
 };
