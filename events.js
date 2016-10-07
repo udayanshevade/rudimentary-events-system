@@ -88,7 +88,15 @@ EventTracker.prototype.notify = function(instance, event) {
  * @param {string} named event
  * @param {any} callback data
  */
-EventTracker.prototype.trigger = function(event, param) {
+EventTracker.prototype.trigger = function(events, param) {
+  function triggerEach(event) { this.triggerEach(event, param) };
+  // parse events
+  events = events.split(' ');
+  // register multiple events
+  events.forEach(triggerEach, this);
+};
+
+EventTracker.prototype.triggerEach = function(event, param) {
   this.triggerEvent(event, param);
   // also trigger events on objects to be notified
   this.triggerNotifications(event, param);

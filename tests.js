@@ -89,3 +89,13 @@ QUnit.test('Can register multiple events at once', function (assert) {
   parent2.trigger('kwanzaa', 'kwanzaa');
   parent1.trigger('christmas', 'christmas');
 });
+
+QUnit.test('Can trigger multiple events at once', function (assert) {
+  var people = new EventTracker('people');
+  people.on('kwanzaa diwali easter eid_al-fitr', function(param) {
+    assert.ok(true, 'People everywhere celebrate ' + param);
+  });
+
+  assert.expect(4);
+  people.trigger('kwanzaa diwali easter eid_al-fitr', 'life');
+});
